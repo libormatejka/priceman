@@ -40,8 +40,8 @@ def get_urls_from_config(sheet_id):
 def get_domain(url):
     parsed = urlparse(url)
     domain = parsed.netloc.lower()
-    if domain.startswith("www."):
-        domain = domain[4:]
+    if not domain.startswith("www."):
+        domain = "www." + domain
     return domain
 
 def parse_price_jedishop(html):
