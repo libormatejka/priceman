@@ -115,7 +115,7 @@ def fetch_price(url):
 def write_prices_to_python_data(sheet_id, data):
     client = get_gsheet_client()
     try:
-        sheet = client.open_by_key(sheet_id).worksheet("python-data")
+        sheet = client.open_by_key(sheet_id).worksheet("Results")
     except Exception as e:
         print("Chyba při otevírání záložky 'python-data':", e)
         raise
