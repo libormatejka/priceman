@@ -1,0 +1,25 @@
+# .github/workflows/priceman.yml
+name: Price Checker
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # UTC = 9:00 CEST
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        env:
+          GOOGLE_SHEET_CREDS_JSON: credentials.json
+          SOURCE_SHEET_ID: ${{ secrets.SOURCE_SHEET_ID }}
+          DEST_SHEET_ID: ${{ secrets.DEST_SHEET_ID }}
+        run: python main.py
