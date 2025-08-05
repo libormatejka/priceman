@@ -3,7 +3,7 @@ name: Price Scraper
 on:
   workflow_dispatch:         # ručně z UI
   schedule:
-    - cron: '*/5 * * * *'      # každý den v 5:00 ráno
+    - cron: '0 5 * * *'      # každý den v 5:00 ráno
 
 jobs:
   run:
