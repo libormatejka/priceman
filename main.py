@@ -132,19 +132,25 @@ def write_prices_to_python_data(sheet_id, data):
 
 def main():
     print("== Spouštím price checker ==")
-    SHEET_ID = os.environ["SOURCE_SHEET_ID"]  # pro čtení i zápis
+    SHEET_ID = os.environ["SOURCE_SHEET_ID"]
     urls = get_urls_from_config(SHEET_ID)
     results = []
-    now = datetime.now().strftime("%Y-%m-%d")
+    now = datetime.now()
+    now_str = now.strftime("%Y-%m-%d")   # Výsledek např. 2025-08-05
+
     for product_id, url in urls:
         price, domain = fetch_price(url)
-        # Vynucený int nebo N/A
         try:
             price_int = int(float(price))
         except:
             price_int = "N/A"
-        results.append([now, url, price_int, product_id, domain])
-        print(f"{url} ➜ {price_int} (ID: {product_id}) | Domain: {domain}")
+        try:
+            pid_int = int(product_id)
+        except:
+            pid_int = product_id
+        results.append([now_str, url, price_int, pid_int, domain])
+        print(f"{url} ➜ {price_int} (ID: {pid_int}) | Domain: {domain}")
+
     write_prices_to_python_data(SHEET_ID, results)
     print("== Hotovo, zkontrolujte Google Sheet! ==")
 
