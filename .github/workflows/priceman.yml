@@ -1,0 +1,31 @@
+name: Price Scraper
+
+on:
+  workflow_dispatch:         # ručně z UI
+  schedule:
+    - cron: '0 5 * * *'      # každý den v 5:00 ráno
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write credentials.json from secret
+        run: |
+          echo "${{ secrets.GOOGLE_SHEET_CREDS_JSON_B64 }}" | base64 -d > credentials.json
+
+      - name: Run price scraper
+        env:
+          GOOGLE_SHEET_CREDS_JSON: ${{ github.workspace }}/credentials.json
+          SOURCE_SHEET_ID: ${{ secrets.SOURCE_SHEET_ID }}
+        run: python main.py
