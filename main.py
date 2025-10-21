@@ -69,11 +69,10 @@ def parse_price_fategate(html):
     return "N/A"
 
 def parse_price_statue(html):
-    m = re.search(r'<meta\s+itemprop="price"\s+content="([\d\.]+)"', html)
+    # Hledáme hodnotu uvnitř <span id="span_productPriceVAT">...</span>
+    m = re.search(r'id="span_productPriceVAT"[^>]*>([\d\s]+)<', html)
     if m:
-        cena = m.group(1)
-        if "." in cena:
-            cena = cena.split(".")[0]
+        cena = m.group(1).replace(" ", "")
         return cena
     return "N/A"
 
